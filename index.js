@@ -405,7 +405,7 @@ app.get('/ideas', async (req, res) => {
 
 
     
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    console.log("Pinged your deployment. You successfully connected to be MongoDB!");
   } finally {
     // await client.close(); // কানেকশন ওপেন রাখার জন্য এটি কমেন্ট করাই থাকবে
   }
