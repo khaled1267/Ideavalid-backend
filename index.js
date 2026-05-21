@@ -413,7 +413,7 @@ app.get('/ideas', async (req, res) => {
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
-  res.send('Hello World! IdeaVault Server is Live.')
+  res.send('Hello World! IdeaVault Server to be MongoDB is Live.')
 })
 
 app.listen(5000, () => {
