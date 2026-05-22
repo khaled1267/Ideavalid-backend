@@ -99,7 +99,7 @@ async function run() {
       res.json(result);
     });
 
-       app.get('/my-ideavalid/:userid',verifyToken, async (req, res) => {
+       app.get('/my-ideavalid/:userid', async (req, res) => {
     
   try {
     const { userid } = req.params; 
