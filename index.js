@@ -81,7 +81,7 @@ async function run() {
       try {
         
 
-        const result = await ideasCollection.insertOne();
+        const result = await ideasCollection.insertOne(req.body);
 
         
         res.status(201).json({ success: true, ...result });
