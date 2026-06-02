@@ -99,20 +99,44 @@ async function run() {
       res.json(result);
     });
 
-       app.get('/my-ideavalid/:userid', async (req, res) => {
+//        app.get('/my-ideavalid/:userid', async (req, res) => {
     
+//   try {
+//     const { userid } = req.params; 
+
+
+//     const result = await ideasCollection.findOne({ _id: new ObjectId(userid)  })
+
+//     res.status(200).json(result);
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     res.status(500).json({ success: false, message: "Internal Server Error" });
+//   }
+// });
+
+ app.get("/my-ideavalid/:userid",  async (req, res) => {
   try {
-    const { userid } = req.params; 
+    const { userid } = req.params;
 
+    const result = await ideasCollection
+      .find({
+        userId: userid,
+      })
+      .toArray();
 
-    const result = await ideasCollection.findOne({ _id: new ObjectId(userid)  })
+    console.log(result,"my ideas");
 
     res.status(200).json(result);
   } catch (error) {
     console.error("Error fetching data:", error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 });
+
 
   
     app.patch("/my-ideavalid/:validid", async (req, res) => {
@@ -161,29 +185,7 @@ async function run() {
       }
     });
 
-    app.get("/my-ideavalid/:userid", async (req, res) => {
-  try {
-    const { userid } = req.params;
-
-    const result = await ideasCollection
-      .find({
-        userId: userid,
-      })
-      .toArray();
-
-    console.log(result);
-
-    res.status(200).json(result);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
-  }
-});
-
+   
     app.post("/comments", async (req, res) => {
       try {
         const { ideaId, userName, userImage, text, userid, email } = req.body;
@@ -305,59 +307,60 @@ async function run() {
       }
     });
 
-    app.get("/users/:email", async (req, res) => {
-      try {
-        const { email } = req.params;
+//     app.get("/users/:email", async (req, res) => {
+//       try {
+//         const { email } = req.params;
 
-        const user = await usersCollection.findOne({ email: email });
+//         const user = await usersCollection.findOne({ email: email });
 
-        if (user) {
-          res.status(200).json(user);
-        } else {
-          res
-            .status(404)
-            .json({ success: false, message: "User profile not found" });
-        }
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-        res
-          .status(500)
-          .json({ success: false, message: "Internal Server Error" });
-      }
-    });
+//         if (user) {
+//           res.status(200).json(user);
+//         } else {
+//           res
+//             .status(404)
+//             .json({ success: false, message: "User profile not found" });
+//         }
+//       } catch (error) {
+//         console.error("Error fetching user profile:", error);
+//         res
+//           .status(500)
+//           .json({ success: false, message: "Internal Server Error" });
+//       }
+//     });
 
-    app.put("/users/:email", async (req, res) => {
-      try {
-        const { email } = req.params;
-        const { name, image } = req.body;
+//    app.put("/users/:email", async (req, res) => {
+//   try {
+//     const { email } = req.params;
+//     const { name, image } = req.body;
 
-        const updateDoc = {
-          $set: {
-            name: name,
-            image: image,
-            updatedAt: new Date(),
-          },
-        };
+//     const updateDoc = {
+//       $set: {
+//         name: name,
+//         image: image,
+//         updatedAt: new Date(),
+//       },
+//     };
 
-        const query = { email: email };
-        const usersCollection = database.collection("users");
-        const result = await usersCollection.updateOne(query, updateDoc);
+//     const query = { email: email };
+//     console.log(query);
+    
+//     // 🌟 FIX: Tmar post logic-e 'usersCollection' upore gloeably defined chhilo. 
+//     // Kintu put block-e 'database.collection' use korechho, jodi 'database' defined na thake tai ekhane error hobe.
+//     // Tai direct global 'usersCollection' track kora holo:
+//     const result = await usersCollection.updateOne(query, updateDoc);
 
-        if (result.modifiedCount > 0 || result.matchedCount > 0) {
-          res
-            .status(200)
-            .json({ success: true, message: "Profile updated successfully!" });
-        } else {
-          res.status(404).json({ success: false, message: "User not found" });
-        }
-      } catch (error) {
-        console.error("Error updating profile:", error);
-        res
-          .status(500)
-          .json({ success: false, message: "Internal Server Error" });
-      }
-    });
+//     console.log("MongoDB Update Result:", result); // Server console-e check korar jonno
 
+//     if (result.matchedCount > 0) {
+//       res.status(200).json({ success: true, message: "Profile updated successfully!" });
+//     } else {
+//       res.status(404).json({ success: false, message: "User not found in database with this email." });
+//     }
+//   } catch (error) {
+//     console.error("Error updating profile:", error);
+//     res.status(500).json({ success: false, message: "Internal Server Error" });
+//   }
+// });
     app.post("/users", async (req, res) => {
       try {
         const userData = req.body;
